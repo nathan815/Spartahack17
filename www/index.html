@@ -43,7 +43,8 @@
 </head>
 
 <body>
-    <h1> My Name Is Matt </h1> 
+    <h1> My Name Is Matt </h1>
+    <h1>THUGLYFE</h1> 
     <div class="app">
         <h1 id="bigOne"></h1>
         <div id="deviceready" class="blink">
@@ -74,7 +75,7 @@
       dbRef.on('value', snap => bigOne.innerText = snap.val());
 
         firebase.database().ref().set({
-            "Hi": "hello" 
+            "Hi": "hello"
         });
     </script>
 </body>
