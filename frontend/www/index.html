@@ -178,7 +178,7 @@ $(document).on('click', '#confirm', function() {
   .done(function(response) {
     hideEverything();
     $newButton.show();
-    $submissionForm.reset();
+    document.getElementById('submissionForm').reset();
     $previewCard.empty();
     $cardContainer.show();
     onHomeFeed = true;
