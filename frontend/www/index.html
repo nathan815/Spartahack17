@@ -64,7 +64,7 @@
 <div id="cardView"></div>
 <div id="previewCard"></div>
 <button class="btn btn-primary" id="newButton"><span class="icon icon-plus"></span></button>
-<div id="submissionForm" class="hidden">
+<form id="submissionForm" class="hidden">
   <input id="firstName" type="text" placeholder="First Name">
   <select id="category">
     <option value="0">Hygiene</option>
@@ -78,7 +78,7 @@
   <textarea id="locationDescription" placeholder="Location Description" rows="5"></textarea>
   <textarea id="lookFor" placeholder="Look For..." rows="5"></textarea>
   <button id="submitNeed" class="btn btn-positive btn-block">Submit Need</button>
-</div>
+</form>
 
 <script>
 var KEY = "AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM";
@@ -144,6 +144,7 @@ $(document).on('click', '#haveHelpedButton', function() {
 $(document).on('click', '#submitNeed', function() {
   hideEverything();
   $previewCard.show();
+  $backBtn.show();
   $previewCard.append(templatePreview({
     item: $('#itemDescription').val(),
     locationDescription: $('#locationDescription').val(),
@@ -158,6 +159,7 @@ $(document).on('click', '#submitNeed', function() {
 
 $(document).on('click', '#backToSubmission', function() {
   hideEverything();
+  $backBtn.show();
   $previewCard.empty();
   $submissionForm.show();
 });
@@ -174,17 +176,18 @@ $(document).on('click', '#confirm', function() {
     lat: currentLat
   })
   .done(function(response) {
+    alert('hi');
     $newButton.show();
+    hideEverything();
+    $submissionForm.reset();
+    $previewCard.empty();
+    $cardContainer.show();
+    onHomeFeed = true;
     getAndUpdateCards();
     if (!response.success)
       alert('There was an error: ' + response.error);
   });
 
-  hideEverything();
-  $submissionForm.empty();
-  $previewCard.empty();
-  $cardContainer.show();
-  onHomeFeed = true;
 });
 
 
@@ -202,9 +205,9 @@ document.addEventListener("backbutton", back, false);
 //////////
 function back() {
   if($previewCard.is(':visible')) {
-    alert('preview active');
-    $previewCard.hide();
+    $previewCard.hide().empty();
     $submissionForm.show();
+    $backBtn.show();
   }
   else {
     hideEverything();
@@ -311,14 +314,11 @@ TEMPLATE STRUCTURES
       <span class="icon icon-check"></span>
       I have helped {{name}}
     </button>
-    {{#if owner}}
-    <button class="btn btn-danger"><span class="icon icon-trash"></span></button>
-    {{/if}}
 </script>
 
 <!--preview-->
 <script id="template-preview" type="text/x-handlebars-template">​
-    <div class="info-card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7C{{latitude}},{{longitude}}&key={{KEY}}');">
+    <div class="card info-card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7C{{latitude}},{{longitude}}&key={{KEY}}');">
         <img class="card-category" src="img/{{category}}.png">
         <span class="name">{{name}}</span>
     </div>
