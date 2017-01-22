@@ -50,12 +50,6 @@ body {
     display: none;
 }
 
-<<<<<<< HEAD
-}
-
-
-
-
 
 #haveHelpedButton {
     position: fixed;
@@ -63,9 +57,10 @@ body {
     left: 0;
     right: 0;
     width:80%;
-
     margin: 0 auto;
-=======
+
+}
+
 #newButton {
     border-radius: 100%;
     width: 60px;
@@ -79,5 +74,4 @@ body {
     left: 0;
     margin: auto;
     box-shadow: 1px 1px 5px #444;
->>>>>>> 7e4a75d5856f19e895819ae0bc639ae9e8c7a844
 }
