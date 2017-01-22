@@ -5,26 +5,73 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
-    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />-->
 
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
     <link rel="stylesheet" type="text/css" href="lib/ratchet/css/ratchet.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
 
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="lib/ratchet/js/ratchet.min.js"></script>
-    
+    <script type="text/javascript" src="lib/jsrender/jsrender.min.js"></script>
+    <script> var jsrender = window.jsrender; </script>
+    <script src="js/main.js"></script>
+
     <title>Hello World</title>
 </head>
 
 <body>
 <header class="bar bar-nav">
-  <a class="icon icon-left-nav pull-left"></a>
-  <a class="icon icon-compose pull-right"></a>
-  <h1 class="title">Title</h1>
+  <!--<a class="icon icon-left-nav pull-left"></a>-->
+  <a class="icon icon-gear pull-right"></a>
+  <h1 class="title">Homeless Helper</h1>
 </header>
+
+<div class="segmented-control">
+  <a class="control-item active" href="#item1mobile">
+    Food
+  </a>
+  <a class="control-item" href="#item2mobile">
+    Hygiene
+  </a>
+  <a class="control-item" href="#item3mobile">
+    Clothes
+  </a>
+  <a class="control-item" href="#item3mobile">
+    Misc
+  </a>
+</div>
+
+
+<div class="card" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center=42.7283878,-84.4821514&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7Clabel:S%7C42.7283878,-84.4821514&key=AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM');">
+  <img src="https://maxcdn.icons8.com/Share/icon/Food//pizza1600.png" />
+  <span class="name">Frank</span>
+  <span class="distance">2 miles away</span>
+  <span class="time">10 minutes ago</span>
+</div>
+<div class="card" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center=42.7283878,-84.4821514&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7Clabel:S%7C42.7283878,-84.4821514&key=AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM');">
+  <img src="https://maxcdn.icons8.com/Share/icon/Food//pizza1600.png" />
+  <span class="distance">2 miles away</span>
+  <span class="time">10 minutes ago</span>
+</div>
+<div class="card" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center=42.7283878,-84.4821514&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7Clabel:S%7C42.7283878,-84.4821514&key=AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM');">
+  <img src="https://maxcdn.icons8.com/Share/icon/Food//pizza1600.png" />
+  <span class="distance">2 miles away</span>
+  <span class="time">10 minutes ago</span>
+</div>
+
+
+
+<button class="btn btn-primary"><span class="icon icon-plus"></span></button>
+
+<script id="templateCard" type="text/x-jsrender">
+<h1>{{:name}}</h1>
+</script>
+
 </body>
 
 <script>
+template('templateCard', { name: 'hi' });
+
 console.log(navigator);
 function geolocationSuccess(position) {
     alert('Latitude: '          + position.coords.latitude          + '\n' +
@@ -34,7 +81,7 @@ function geolocationSuccess(position) {
           'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
           'Heading: '           + position.coords.heading           + '\n' +
           'Speed: '             + position.coords.speed             + '\n' +
-          'Timestamp: '         + position.timestamp                + '\n');
+          'Timestamp: '         + position.timestamp                + '\n';
 }
 navigator.geolocation.getCurrentPosition(geolocationSuccess);
 </script>
