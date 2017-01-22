@@ -23,7 +23,7 @@
 
 <body>
 <header class="bar bar-nav">
-  <a class="icon icon-left-nav pull-left" id="back"></a>
+  <a class="icon icon-left-nav pull-left hidden" id="back"></a>
   <a href="#myPopover" class="pull-right">
       <h1 class="title">
         <span class="icon icon-more-vertical"></span>
@@ -52,7 +52,12 @@
 
 <div id="content">
 
-<div id="cardContainer"></div>
+<div id="cardContainer">
+  <br>
+  <br>
+  <br>
+  <img src="img/loading.gif" style="display:block;width:100px;margin: 0 auto;" />
+</div>
 <div id="cardView"></div>
 <div id="previewCard"></div>
 <button class="btn btn-primary" id="newButton"><span class="icon icon-plus"></span></button>
@@ -105,6 +110,7 @@ $(document).on('click', '.info-card', function() {
   $cardContainer.hide();
   $cardView.empty().show();
   $(this).clone().appendTo($cardView);
+  $backBtn.show();
   $cardView.append(templateCardView({
     item: selectedCard['item_description'],
     locationDescription: selectedCard['location_description'],
@@ -167,7 +173,6 @@ $(document).on('click', '#confirm', function() {
   .done(function(response) {
     $newButton.show();
     getAndUpdateCards();
-    alert('im here');
     if (!response.success)
       alert('There was an error: ' + response.error);
   });
@@ -183,6 +188,7 @@ $(document).on('click', '#confirm', function() {
 $newButton.click(function() {
   hideEverything();
   $submissionForm.show();
+  $backBtn.show();
 });
 
 $backBtn.click(back);
@@ -201,8 +207,8 @@ function back() {
     hideEverything();
     $cardContainer.show();
     $newButton.show();
+    onHomeFeed = true;
   }
-  alert('back')
 }
 function hideEverything() {
   onHomeFeed = false;
@@ -211,6 +217,7 @@ function hideEverything() {
   $submissionForm.hide();
   $newButton.hide();
   $previewCard.hide();
+  $backBtn.hide();
 }
 function getAndUpdateCards() {
   if (!onHomeFeed)
