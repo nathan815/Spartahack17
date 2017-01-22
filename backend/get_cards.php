@@ -45,8 +45,9 @@ $params = [
 if($q->execute($params)) {
     while($row = $q->fetch(PDO::FETCH_ASSOC)) {
         $id = (int)$row['id'];
+        $row['time'] = time_since(strtotime($row['created_at']));
+        $row['distance'] = round($row['distance'], 4);
         $cards[" " . $id] = $row;
-        $cards[" " . $id]['time'] = time_since(strtotime($row['created_at']));
     }
 }
 

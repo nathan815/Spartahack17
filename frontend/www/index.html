@@ -23,11 +23,16 @@
 
 <body>
 <header class="bar bar-nav">
-  <a class="icon icon-gear pull-right"></a>
-  <div class="image-wrapper">
+  <a class="icon icon-left-nav pull-left" id="back"></a>
+  <a href="#myPopover" class="pull-right">
+      <h1 class="title">
+        <span class="icon icon-more-vertical"></span>
+      </h1>
+    </a>
+  <!--<div class="image-wrapper">
     <img src ="img/uGive.png" class="scale-image" />
-  </div>
-  <h1 class="title">Homeless Helper</h1>
+  </div>-->
+  <h1 class="title">UnitedShare</h1>
 </header>
 
 <!--<div class="segmented-control">
@@ -81,6 +86,7 @@ var $submissionForm = $('#submissionForm');
 var $newButton = $('#newButton');
 var $submitNeed = $('#submitNeed');
 var $previewCard = $('#previewCard');
+var $backBtn = $('#back');
 var viewPortPosition;
 var onHomeFeed = true;
 setLocation(getAndUpdateCards);
@@ -91,7 +97,7 @@ var setLocationInterval = setInterval(setLocation, 120000);
 /////////
 //EVENT LISTENERS
 //////////
-$(document).on('click', '.card', function() {
+$(document).on('click', '.info-card', function() {
   hideEverything();
   var id = $(this).attr('id');
   var selectedCard = currentCards[' ' + id];
@@ -106,6 +112,7 @@ $(document).on('click', '.card', function() {
     name: selectedCard['first_name'],
     latitude: selectedCard['latitude'],
     longitude: selectedCard['longitude'],
+    owner: selectedCard['user_id'] == device.uuid
   }));
 });
 
@@ -178,9 +185,25 @@ $newButton.click(function() {
   $submissionForm.show();
 });
 
+$backBtn.click(back);
+document.addEventListener("backbutton", back, false);
+
 /////////
 //FUNCTIONS
 //////////
+function back() {
+  if($previewCard.is(':visible')) {
+    alert('preview active');
+    $previewCard.hide();
+    $submissionForm.show();
+  }
+  else {
+    hideEverything();
+    $cardContainer.show();
+    $newButton.show();
+  }
+  alert('back')
+}
 function hideEverything() {
   onHomeFeed = false;
   $cardContainer.hide();
@@ -252,7 +275,7 @@ TEMPLATE STRUCTURES
 
 <!--card-->
 <script id="template-card" type="text/x-handlebars-template">​
-    <div class="card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7Clabel:S%7C{{latitude}},{{longitude}}&key={{KEY}}');">
+    <div class="card info-card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7C{{latitude}},{{longitude}}&key={{KEY}}');">
         <img class="card-category" src="img/{{category}}.png">
         <span class="distance">{{distance}} miles away</span>
         <span class="time">{{time}} ago</span>
@@ -262,28 +285,49 @@ TEMPLATE STRUCTURES
 
 <!--card view-->
 <script id="template-card-view" type="text/x-handlebars-template">​
-    <h3>Item:</h3>
-    {{item}}
-    <h3>Location Description:</h3>
-    {{locationDescription}}
-    <h3>Look For:</h3>
-    {{lookFor}}
-    <button id="haveHelpedButton" class="btn btn-primary btn-block">I have helped {{name}}</button>
+    <div class="card section">
+      <b>Item:</b>
+      {{item}}
+    </div>
+    <div class="card section">
+      <b>Location Description:</b>
+      {{locationDescription}}
+    </div>
+    <div class="card section">
+      <b>Look For:</b>
+      {{lookFor}}
+    </div>
+    <button id="haveHelpedButton" class="btn btn-primary btn-block">
+      <span class="icon icon-check"></span>
+      I have helped {{name}}
+    </button>
+    {{#if owner}}
+    <button class="btn btn-danger"><span class="icon icon-trash"></span></button>
+    {{/if}}
 </script>
 
 <!--preview-->
 <script id="template-preview" type="text/x-handlebars-template">​
-    <div class="card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7Clabel:S%7C{{latitude}},{{longitude}}&key={{KEY}}');">
+    <div class="info-card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7C{{latitude}},{{longitude}}&key={{KEY}}');">
         <img class="card-category" src="img/{{category}}.png">
         <span class="name">{{name}}</span>
     </div>
-    <h3>Item:</h3>
-    {{item}}
-    <h3>Location Description:</h3>
-    {{locationDescription}}
-    <h3>Look For:</h3>
-    {{lookFor}}
-    <button id="backToSubmission" class="btn btn-primary">Back</button> <button id="confirm" class="btn btn-primary">Confirm</button>
+    <div class="card section">
+      <b>Item Needed:</b>
+      {{item}}
+    </div>
+    <div class="card section">
+      <b>Description of Location:</b>
+      {{locationDescription}}
+    </div>
+    <div class="card section">
+      <b>Look For:</b>
+      {{lookFor}}
+    </div>
+    <div class="buttonToolbar">
+      <button id="backToSubmission" class="btn btn-danger">Cancel</button> 
+      <button id="confirm" class="btn btn-primary">Confirm</button>
+    </div>
 </script>
 
 
