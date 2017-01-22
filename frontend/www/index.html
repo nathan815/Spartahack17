@@ -41,6 +41,18 @@
 </div>
 <div id="cardContainer"></div>
 
+<!--<div id = "square" style = "position: relative; max-width:20; margin-top: 20px;max-height: 60px"><img src="img/logo.png"/></div>
+
+ <form style = "positon:relative; padding-top:100px; margin:auto; max-width: 90%;position: center;">
+    <input type="text" name="name" placeholder="Name" />
+    <input type="text" name="item" placeholder="Item" />
+    <textarea placeholder="Location Discription" name = "locat_disc"onkeyup="adjust_textarea(this)"></textarea>
+    <textarea placeholder="Characteristics" name = "desc" onkeyup="adjust_textarea(this)"></textarea>
+    <input type="button" class="btn btn-primary btn-block"value="Enter" />
+
+</form>
+</div>-->
+
 <script>
 var KEY = "AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM"
 var CATEGORIES = ["Hygiene", "Bedding", "Food", "Clothing", "Misc."];
@@ -52,21 +64,10 @@ var $cardContainer = $("#cardContainer");
 var viewPortPosition;
 // var checkLocation = setInterval();
 getAndUpdateCards();
+setLocation();
 var checkTimer = setInterval(getAndUpdateCards, 10000);
+var setLocationInterval = setInterval(setLocation, 120000);
 
-console.log(navigator);
-function geolocationSuccess(position) {
-    alert('Latitude: '          + position.coords.latitude          + '\n' +
-          'Longitude: '         + position.coords.longitude         + '\n' +
-          'Altitude: '          + position.coords.altitude          + '\n' +
-          'Accuracy: '          + position.coords.accuracy          + '\n' +
-          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-          'Heading: '           + position.coords.heading           + '\n' +
-          'Speed: '             + position.coords.speed             + '\n' +
-          'Timestamp: '         + position.timestamp                + '\n'
-    );
-}
-navigator.geolocation.getCurrentPosition(geolocationSuccess);
 
 /////////
 //FUNCTIONS
@@ -105,6 +106,18 @@ function updateCards() {
     }));
   }
   $(window).scrollTop(viewPortPosition);
+}
+
+function setLocation() {
+  navigator.geolocation.getCurrentPosition(function() {
+    currentLat = position.coords.latitude;
+    currentLong = position.coords.longitude
+  });
+}
+
+function adjust_textarea(h) {
+  h.style.height = "20px";
+  h.style.height = (h.scrollHeight)+"px";
 }
 
 </script>
