@@ -12,16 +12,15 @@
 
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="lib/ratchet/js/ratchet.min.js"></script>
-    <script type="text/javascript" src="lib/jsrender/jsrender.min.js"></script>
-    <script> var jsrender = window.jsrender; </script>
+    <script type="text/javascript" src="jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="handlebars.js"></script>
     <script src="js/main.js"></script>
-
+    
     <title>Hello World</title>
 </head>
 
 <body>
 <header class="bar bar-nav">
-  <!--<a class="icon icon-left-nav pull-left"></a>-->
   <a class="icon icon-gear pull-right"></a>
   <h1 class="title">Homeless Helper</h1>
 </header>
@@ -42,35 +41,8 @@
 </div>
 
 
-<div class="card" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center=42.7283878,-84.4821514&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7Clabel:S%7C42.7283878,-84.4821514&key=AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM');">
-  <img src="https://maxcdn.icons8.com/Share/icon/Food//pizza1600.png" />
-  <span class="name">Frank</span>
-  <span class="distance">2 miles away</span>
-  <span class="time">10 minutes ago</span>
-</div>
-<div class="card" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center=42.7283878,-84.4821514&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7Clabel:S%7C42.7283878,-84.4821514&key=AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM');">
-  <img src="https://maxcdn.icons8.com/Share/icon/Food//pizza1600.png" />
-  <span class="distance">2 miles away</span>
-  <span class="time">10 minutes ago</span>
-</div>
-<div class="card" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center=42.7283878,-84.4821514&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7Clabel:S%7C42.7283878,-84.4821514&key=AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM');">
-  <img src="https://maxcdn.icons8.com/Share/icon/Food//pizza1600.png" />
-  <span class="distance">2 miles away</span>
-  <span class="time">10 minutes ago</span>
-</div>
-
-
-
-<button class="btn btn-primary"><span class="icon icon-plus"></span></button>
-
-<script id="templateCard" type="text/x-jsrender">
-<h1>{{:name}}</h1>
-</script>
-
-</body>
-
 <script>
-template('templateCard', { name: 'hi' });
+var KEY = "AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM"
 
 console.log(navigator);
 function geolocationSuccess(position) {
@@ -85,4 +57,33 @@ function geolocationSuccess(position) {
 }
 navigator.geolocation.getCurrentPosition(geolocationSuccess);
 </script>
+
+
+<!--/////////
+TEMPLATE STRUCTURES
+//////////-->
+
+<!--card-->
+<script id="template-card" type="text/x-handlebars-template">​
+    <div class="card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7Clabel:S%7C{{latitude},{{longitude}&key={{KEY}}');">
+        <img class="card-category" src="img/{{category}}.png">
+        <span class="distance">{{distance}} miles away</span>
+        <span class="time">{{time}} ago</span>
+        <span class="name">{{name}}</span>
+    </div>
+</script>
+
+<!--/////////
+COMPILING TEMPLATE STRUCTURES
+//////////-->
+<script>
+    var templateCard = Handlebars.compile($("#template-card").html());
+    $("#display").append(templateCard({
+        id: "James",
+        category: "misc"
+    }));    
+</script>
+
+
+</body>
 </html>
