@@ -26,7 +26,7 @@
   <h1 class="title">Homeless Helper</h1>
 </header>
 
-<div class="segmented-control">
+<!--<div class="segmented-control">
   <a class="control-item active" href="#item1mobile">
     Food
   </a>
@@ -39,8 +39,10 @@
   <a class="control-item" href="#item3mobile">
     Misc
   </a>
-</div>
+</div>-->
 <div id="cardContainer"></div>
+<div id="cardView"></div>
+
 
 <!--<div id = "square" style = "position: relative; max-width:20; margin-top: 20px;max-height: 60px"><img src="img/logo.png"/></div>
 
@@ -62,7 +64,9 @@ var currentLong = 34;
 var currentRadius = 5;
 var currentCards;
 var $cardContainer = $("#cardContainer");
+var $cardView = $('#cardView');
 var viewPortPosition;
+var onHomeFeed = true;
 // var checkLocation = setInterval();
 setLocation(getAndUpdateCards);
 var checkTimer = setInterval(getAndUpdateCards, 10000);
@@ -71,27 +75,43 @@ var setLocationInterval = setInterval(setLocation, 120000);
 /////////
 //EVENT LISTENERS
 //////////
-
+$(document).on('click', '.card', function() {
+  onHomeFeed = false;
+  var id = $(this).attr('id');
+  var selectedCard = currentCards[id];
+  $cardContainer.hide();
+  $cardView.empty();
+  $(this).clone().appendTo($cardView);
+  $cardView.append(templateCardView({
+    item: selectedCard['item'],
+    locationDescription: selectedCard['location_description'],
+    lookFor: selectedCard['person_description'],
+    latitude: selectedCard['latitude'],
+    longitude: selectedCard['longitude'],
+  }));
+});
 
 /////////
 //FUNCTIONS
 //////////
 function getAndUpdateCards() {
-    $.ajax("http://35.22.9.99:7777/get_cards.php", {
-      jsonp: false,
-      method: "GET",
-      dataType: "jsonp",
-      jsonpCallback: "cb",
-      data: {
-        lat: currentLat,
-        long: currentLong,
-        radius: currentRadius
-      },
-      success: function(response) {
-        currentCards = response.cards;
-        updateCards();
-      }
-    });
+  if (!onHomeFeed)
+    return;
+  $.ajax("http://35.22.9.99:7777/get_cards.php", {
+    jsonp: false,
+    method: "GET",
+    dataType: "jsonp",
+    jsonpCallback: "cb",
+    data: {
+      lat: currentLat,
+      long: currentLong,
+      radius: currentRadius
+    },
+    success: function(response) {
+      currentCards = response.cards;
+      updateCards();
+    }
+  });
 }
 
 function updateCards() {
@@ -144,11 +164,17 @@ TEMPLATE STRUCTURES
     </div>
 </script>
 
+<!--card view-->
+<script id="template-card-view" type="text/x-handlebars-template">​
+    
+</script>
+
 <!--/////////
 COMPILING TEMPLATE STRUCTURES
 //////////-->
 <script>
     var templateCard = Handlebars.compile($("#template-card").html());
+    var templateCardView = Handlebars.compile($("#template-card-view").html());
         
 </script>
 
