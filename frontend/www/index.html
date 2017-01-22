@@ -8,19 +8,20 @@
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
 
     <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link rel="stylesheet" type="text/css" href="lib/ratchet/css/ratchet.min.css" />
 
     <script type="text/javascript" src="cordova.js"></script>
-
-    <script type="text/javascript">
-        //app.initialize();
-        angular.module('todo', ['ionic'])
-    </script>
+    <script type="text/javascript" src="lib/ratchet/js/ratchet.min.js"></script>
     
     <title>Hello World</title>
 </head>
 
 <body>
-
+<header class="bar bar-nav">
+  <a class="icon icon-left-nav pull-left"></a>
+  <a class="icon icon-compose pull-right"></a>
+  <h1 class="title">Title</h1>
+</header>
 </body>
 
 <script>
