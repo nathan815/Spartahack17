@@ -24,7 +24,7 @@ if(!is_null($category)) {
     $params['category'] = $category;
 }
 $query = "SELECT
-    `id`, `user_id`, `first_name`, `category_id`, `location_description`, `person_description`, `latitude`, `longitude`, `created_at`,
+    `id`, `user_id`, `first_name`, `category_id`, `item_description`, `location_description`, `person_description`, `latitude`, `longitude`, `created_at`,
     (
         6371 *
         acos(

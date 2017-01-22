@@ -9,6 +9,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 $name = $_POST['name'];
 $userId = $_POST['user_id'];
 $category = $_POST['category_id'];
+$item_desc = $_POST['item_desc'];
 $location_desc = $_POST['location_desc'];
 $person_desc = $_POST['person_desc'];
 $long = $_POST['long'];
@@ -18,6 +19,10 @@ $lat = $_POST['lat'];
 
 if(strlen($name) > NAME_LENGTH) {
     output_json_error('Name is too long.');
+}
+
+if(strlen($item_desc) > ITEM_DESC_LENGTH) {
+    output_json_error('Item description is too long.');
 }
 
 if(strlen($location_desc) > LOCATION_DESC_LENGTH) {

@@ -9,6 +9,7 @@
     <meta http-equiv="Content-Security-Policy" content="" />
 
     <link rel="stylesheet" type="text/css" href="lib/ratchet/css/ratchet.min.css" />
+    <link rel="stylesheet" type="text/css" href="lib/ratchet/css/ratchet-theme-android.min.css" />
     <link rel="stylesheet" type="text/css" href="css/main.css" />
 
     <script type="text/javascript" src="cordova.js"></script>
@@ -42,19 +43,8 @@
 </div>-->
 <div id="cardContainer"></div>
 <div id="cardView"></div>
-
-
-<!--<div id = "square" style = "position: relative; max-width:20; margin-top: 20px;max-height: 60px"><img src="img/logo.png"/></div>
-
- <form style = "positon:relative; padding-top:100px; margin:auto; max-width: 90%;position: center;">
-    <input type="text" name="name" placeholder="Name" />
-    <input type="text" name="item" placeholder="Item" />
-    <textarea placeholder="Location Discription" name = "locat_disc"onkeyup="adjust_textarea(this)"></textarea>
-    <textarea placeholder="Characteristics" name = "desc" onkeyup="adjust_textarea(this)"></textarea>
-    <input type="button" class="btn btn-primary btn-block"value="Enter" />
-
-</form>
-</div>-->
+<div id="submissionForm"></div>
+<button class="btn btn-primary" id="newButton"><span class="icon icon-plus"></span></button>
 
 <script>
 var KEY = "AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM"
@@ -66,8 +56,8 @@ var currentCard;
 var selectedCard;
 var $cardContainer = $("#cardContainer");
 var $cardView = $('#cardView');
-var $newNeed = $('#newNeed');
-var $addButton = $('#addButton');
+var $submissionForm = $('#submissionForm');
+var $newButton = $('#newButton');
 var viewPortPosition;
 var onHomeFeed = true;
 // var checkLocation = setInterval();
@@ -96,6 +86,7 @@ $(document).on('click', '.card', function() {
   }));
 });
 
+
 $(document).on('click', '#haveHelpedButton', function() {
   if (confirm("Are you sure you've met this need?")) {
     $.post("http://35.22.9.99:7777/completed.php", {
@@ -110,13 +101,26 @@ $(document).on('click', '#haveHelpedButton', function() {
   }
 });
 
-$addButton.on('click', function() {
-  $newNeed.show();
+
+
+$newButton.click(function() {
+  hideEverything();
+  $submissionForm.show().html(templateSubmissionForm({
+    categories: CATEGORIES
+  }));
+
 });
 
 /////////
 //FUNCTIONS
 //////////
+function hideEverything() {
+  onHomeFeed = false;
+  $cardContainer.hide();
+  $cardView.hide();
+  $submissionForm.hide();
+  $newButton.hide();
+}
 function getAndUpdateCards() {
   if (!onHomeFeed)
     return;
@@ -198,12 +202,41 @@ TEMPLATE STRUCTURES
     <button id="haveHelpedButton" class="btn btn-primary btn-block">I have helped {{name}}</button>
 </script>
 
+<!--submission view-->
+<script id="template-submission-form" type="text/x-handlebars-template">​
+  <!--<div id = "square" style = "position: relative; max-width:20; margin-top: 20px;max-height: 60px"><img src="img/logo.png"/></div>
+
+   <form style = "positon:relative; padding-top:100px; margin:auto; max-width: 90%;position: center;">
+      <input type="text" name="name" placeholder="Name" />
+      <input type="text" name="item" placeholder="Item" />
+      <textarea placeholder="Location Description" name = "locat_disc"onkeyup="adjust_textarea(this)"></textarea>
+      <textarea placeholder="What to Look For" name = "desc" onkeyup="adjust_textarea(this)"></textarea>
+      <input type="button" class="btn btn-primary btn-block"value="Enter" />
+
+  </form>-->
+
+  <form>
+    <input type="text" placeholder="Name">
+    <select>
+      {{#list cat}}
+      <option>{{ name }}</option>
+      {{/list}}
+    </select>
+    <input type="text" placeholder="Item description">
+
+    <textarea rows="5"></textarea>
+    <button class="btn btn-positive btn-block">Choose existing</button>
+  </form>
+
+</script>
+
 <!--/////////
 COMPILING TEMPLATE STRUCTURES
 //////////-->
 <script>
     var templateCard = Handlebars.compile($("#template-card").html());
     var templateCardView = Handlebars.compile($("#template-card-view").html());
+    var templateSubmissionForm = Handlebars.compile($("#template-submission-form").html());
         
 </script>
 
