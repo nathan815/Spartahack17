@@ -41,10 +41,12 @@
     Misc
   </a>
 </div>-->
-<div id="cardContainer"></div>
-<div id="cardView"></div>
-<div id="submissionForm"></div>
-<button class="btn btn-primary" id="newButton"><span class="icon icon-plus"></span></button>
+<div id="content">
+  <div id="cardContainer"></div>
+  <div id="cardView"></div>
+  <div id="submissionForm"></div>
+  <button class="btn btn-primary" id="newButton"><span class="icon icon-plus"></span></button>
+</body>
 
 <script>
 var KEY = "AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM"
@@ -71,7 +73,7 @@ var setLocationInterval = setInterval(setLocation, 120000);
 $(document).on('click', '.card', function() {
   hideEverything();
   var id = $(this).attr('id');
-  var selectedCard = currentCards[id];
+  var selectedCard = currentCards[' ' + id];
   currentCard = selectedCard;
   $cardContainer.hide();
   $cardView.empty().show();
@@ -145,6 +147,7 @@ function updateCards() {
   viewPortPosition = $(window).scrollTop();
   $cardContainer.empty();
   for (var card in currentCards) {
+
     $cardContainer.append(templateCard({
         id: currentCards[card]["id"],
         latitude: currentCards[card]["latitude"],
@@ -154,7 +157,7 @@ function updateCards() {
         time: currentCards[card]["time"],
         name: currentCards[card]["first_name"],
         distance: currentCards[card]["distance"]
-    }));
+    }).trim());
   }
   $(window).scrollTop(viewPortPosition);
 }
