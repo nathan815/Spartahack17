@@ -69,12 +69,12 @@ var setLocationInterval = setInterval(setLocation, 120000);
 //EVENT LISTENERS
 //////////
 $(document).on('click', '.card', function() {
-  onHomeFeed = false;
+  hideEverything();
   var id = $(this).attr('id');
   var selectedCard = currentCards[id];
   currentCard = selectedCard;
   $cardContainer.hide();
-  $cardView.empty();
+  $cardView.empty().show();
   $(this).clone().appendTo($cardView);
   $cardView.append(templateCardView({
     item: selectedCard['item_description'],
