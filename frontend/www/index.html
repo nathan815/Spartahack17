@@ -12,8 +12,8 @@
 
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="lib/ratchet/js/ratchet.min.js"></script>
-    <script type="text/javascript" src="jquery-3.1.1.min.js"></script>
-    <script type="text/javascript" src="handlebars.js"></script>
+    <script type="text/javascript" src="lib/jquery/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="lib/handlebars/handlebars.js"></script>
     <script src="js/main.js"></script>
     
     <title>Hello World</title>
@@ -39,10 +39,20 @@
     Misc
   </a>
 </div>
-
+<div id="cardContainer"></div>
 
 <script>
 var KEY = "AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM"
+var CATEGORIES = ["Hygiene", "Bedding", "Food", "Clothing", "Misc."];
+var currentLat = 23;
+var currentLong = 34;
+var currentRadius = 5;
+var currentCards;
+var $cardContainer = $("#cardContainer");
+var viewPortPosition;
+// var checkLocation = setInterval();
+getAndUpdateCards();
+var checkTimer = setInterval(getAndUpdateCards, 10000);
 
 console.log(navigator);
 function geolocationSuccess(position) {
@@ -53,11 +63,51 @@ function geolocationSuccess(position) {
           'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
           'Heading: '           + position.coords.heading           + '\n' +
           'Speed: '             + position.coords.speed             + '\n' +
-          'Timestamp: '         + position.timestamp                + '\n';
+          'Timestamp: '         + position.timestamp                + '\n'
+    );
 }
 navigator.geolocation.getCurrentPosition(geolocationSuccess);
-</script>
 
+/////////
+//FUNCTIONS
+//////////
+function getAndUpdateCards() {
+    $.ajax("http://35.22.9.99:7777/get_cards.php", {
+      jsonp: false,
+      method: "GET",
+      dataType: "jsonp",
+      jsonpCallback: "cb",
+      data: {
+        lat: currentLat,
+        long: currentLong,
+        radius: currentRadius
+      },
+      success: function(response) {
+        currentCards = response.cards;
+        updateCards();
+      }
+    });
+}
+
+function updateCards() {
+  viewPortPosition = $(window).scrollTop();
+  $cardContainer.empty();
+  for (var card in currentCards) {
+    $cardContainer.append(templateCard({
+        id: currentCards[card]["id"],
+        latitude: currentCards[card]["latitude"],
+        longitude: currentCards[card]["longitude"],
+        KEY: KEY,
+        category: currentCards[card]["category_id"],
+        time: currentCards[card]["time"],
+        name: currentCards[card]["first_name"],
+        distance: currentCards[card]["distance"]
+    }));
+  }
+  $(window).scrollTop(viewPortPosition);
+}
+
+</script>
 
 <!--/////////
 TEMPLATE STRUCTURES
@@ -65,7 +115,7 @@ TEMPLATE STRUCTURES
 
 <!--card-->
 <script id="template-card" type="text/x-handlebars-template">​
-    <div class="card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7Clabel:S%7C{{latitude},{{longitude}&key={{KEY}}');">
+    <div class="card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7Clabel:S%7C{{latitude}},{{longitude}}&key={{KEY}}');">
         <img class="card-category" src="img/{{category}}.png">
         <span class="distance">{{distance}} miles away</span>
         <span class="time">{{time}} ago</span>
@@ -78,10 +128,7 @@ COMPILING TEMPLATE STRUCTURES
 //////////-->
 <script>
     var templateCard = Handlebars.compile($("#template-card").html());
-    $("#display").append(templateCard({
-        id: "James",
-        category: "misc"
-    }));    
+        
 </script>
 
 
