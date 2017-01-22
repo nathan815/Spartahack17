@@ -176,9 +176,8 @@ $(document).on('click', '#confirm', function() {
     lat: currentLat
   })
   .done(function(response) {
-    alert('hi');
-    $newButton.show();
     hideEverything();
+    $newButton.show();
     $submissionForm.reset();
     $previewCard.empty();
     $cardContainer.show();
