@@ -34,9 +34,9 @@ if(!is_numeric($long) || !is_numeric($lat)) {
 
 $query = "INSERT INTO needs ( `user_id`, `first_name`, `category_id`, 
                               `location_description`, `person_description`, 
-                              `latitude`, `longitude` )
+                              `latitude`, `longitude`, `created_at` )
           VALUES ( :user_id, :first_name, :category_id, :location_desc,
-                   :person_desc, :lat, :long )";
+                   :person_desc, :lat, :long, NOW() )";
 $q = $dbh->prepare($query);
 $params = [
     'user_id' => $userId,
