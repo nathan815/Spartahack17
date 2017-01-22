@@ -1,0 +1,8 @@
+<?php
+
+// Configuration
+
+define('DATABASE_USERNAME', '');
+define('DATABASE_PASSWORD', '');
+define('DATABASE_NAME', '');
+define('DATABASE_HOST', '');

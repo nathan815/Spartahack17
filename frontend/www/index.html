@@ -8,63 +8,33 @@
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
 
     <link rel="stylesheet" type="text/css" href="css/index.css" />
-    <link rel="stylesheet" href="lib/onsen/css/onsenui.css"/>
-    <link rel="stylesheet" href="lib/onsen/css/onsen-css-components-blue-theme.css"/>
-    
-    <script src="lib/onsen/js/onsenui.js"></script>
-    <script src="lib/onsen/js/angular-onsenui.js"></script>
+
     <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
+
     <script type="text/javascript">
-        app.initialize();
+        //app.initialize();
+        angular.module('todo', ['ionic'])
     </script>
     
     <title>Hello World</title>
 </head>
 
-<body ng-controller="AppController">
-    <ons-page>
-      <ons-toolbar>
-        <div class="left">
-          <ons-back-button>Back</ons-back-button>
-        </div>
-        <div class="center">Title</div>
-        <div class="right">
-          <ons-toolbar-button>
-            <ons-icon icon="md-menu"></ons-icon>
-          </ons-toolbar-button>
-        </div>
-      </ons-toolbar>
-
-      Some other content...
-      <ons-fab>+</ons-fab>
-    </ons-page>
-
-
-    <div class="app">
-        <h1 id="bigOne"></h1>
-        <div id="deviceready" class="blink">
-            <p class="event listening">Connecting to Device</p>
-            <p class="event received">Device is Ready</p>
-        </div>
-    </div>
-
-    <!--<script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
-    <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyA-vXfbN0Tfw5pe5GCfdWvar4_O41upIuE",
-        authDomain: "spartahackhomeless2k17.firebaseapp.com",
-        databaseURL: "https://spartahackhomeless2k17.firebaseio.com",
-        storageBucket: "spartahackhomeless2k17.appspot.com",
-        messagingSenderId: "537504787096"
-      };
-      firebase.initializeApp(config);
-      var bigOne = document.getElementById('bigOne');
-      /*var dbRef = firebase.database().ref().child('hi');
-      dbRef.on('value', snap => bigOne.innerText = snap.val());*/
-    </script>-->
+<body>
 
 </body>
 
+<script>
+console.log(navigator);
+function geolocationSuccess(position) {
+    alert('Latitude: '          + position.coords.latitude          + '\n' +
+          'Longitude: '         + position.coords.longitude         + '\n' +
+          'Altitude: '          + position.coords.altitude          + '\n' +
+          'Accuracy: '          + position.coords.accuracy          + '\n' +
+          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+          'Heading: '           + position.coords.heading           + '\n' +
+          'Speed: '             + position.coords.speed             + '\n' +
+          'Timestamp: '         + position.timestamp                + '\n');
+}
+navigator.geolocation.getCurrentPosition(geolocationSuccess);
+</script>
 </html>
