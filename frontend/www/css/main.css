@@ -110,3 +110,7 @@ max-width: 80px;
 .image-wrapper {
 position: relative;
 }
+
+#submissionForm {
+    padding: 20px;
+}
