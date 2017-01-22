@@ -78,7 +78,6 @@ body {
     right: 0;
     width:80%;
     margin: 0 auto;
-
 }
 
 #newButton {
@@ -94,4 +93,15 @@ body {
     left: 0;
     margin: auto;
     box-shadow: 1px 1px 5px #444;
+}
+
+.scale-image {
+display: block;
+width: 50px;
+float:left;
+max-width: 80px;
+}
+
+.image-wrapper {
+position: relative;
 }
