@@ -64,10 +64,13 @@ var currentCards;
 var $cardContainer = $("#cardContainer");
 var viewPortPosition;
 // var checkLocation = setInterval();
-getAndUpdateCards();
-setLocation();
+setLocation(getAndUpdateCards);
 var checkTimer = setInterval(getAndUpdateCards, 10000);
 var setLocationInterval = setInterval(setLocation, 120000);
+
+/////////
+//EVENT LISTENERS
+//////////
 
 
 /////////
@@ -109,10 +112,14 @@ function updateCards() {
   $(window).scrollTop(viewPortPosition);
 }
 
-function setLocation() {
-  navigator.geolocation.getCurrentPosition(function() {
-    currentLat = position.coords.latitude;
-    currentLong = position.coords.longitude
+function setLocation(callback) {
+  tempVar = this;
+  navigator.geolocation.getCurrentPosition(function(position) {
+    tempVar.currentLat = position.coords.latitude;
+    tempVar.currentLong = position.coords.longitude;
+    if (callback != undefined) {
+      callback();
+    }
   });
 }
 
