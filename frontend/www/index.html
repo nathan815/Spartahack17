@@ -43,11 +43,26 @@
 </div>-->
 <div id="cardContainer"></div>
 <div id="cardView"></div>
-<div id="submissionForm"></div>
+<div id="previewCard"></div>
 <button class="btn btn-primary" id="newButton"><span class="icon icon-plus"></span></button>
+<div id="submissionForm" class="hidden">
+  <input id="firstName" type="text" placeholder="First Name">
+  <select id="category">
+    <option value="0">Hygiene</option>
+    <option value="1">Bedding</option>
+    <option value="2">Food</option>
+    <option value="3">Clothing</option>
+    <option value="4">Misc.</option>
+  </select>
+  <input id="itemDescription" type="text" placeholder="Item description">
+
+  <textarea id="locationDescription" placeholder="Location Description" rows="5"></textarea>
+  <textarea id="lookFor" placeholder="Look For..." rows="5"></textarea>
+  <button id="submitNeed" class="btn btn-positive btn-block">Submit Need</button>
+</div>
 
 <script>
-var KEY = "AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM"
+var KEY = "AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM";
 var CATEGORIES = ["Hygiene", "Bedding", "Food", "Clothing", "Misc."];
 var currentLat = 23;
 var currentLong = 34;
@@ -58,23 +73,25 @@ var $cardContainer = $("#cardContainer");
 var $cardView = $('#cardView');
 var $submissionForm = $('#submissionForm');
 var $newButton = $('#newButton');
+var $submitNeed = $('#submitNeed');
+var $previewCard = $('#previewCard');
 var viewPortPosition;
 var onHomeFeed = true;
-// var checkLocation = setInterval();
 setLocation(getAndUpdateCards);
 var checkTimer = setInterval(getAndUpdateCards, 10000);
 var setLocationInterval = setInterval(setLocation, 120000);
+
 
 /////////
 //EVENT LISTENERS
 //////////
 $(document).on('click', '.card', function() {
-  onHomeFeed = false;
+  hideEverything();
   var id = $(this).attr('id');
   var selectedCard = currentCards[id];
   currentCard = selectedCard;
   $cardContainer.hide();
-  $cardView.empty();
+  $cardView.empty().show();
   $(this).clone().appendTo($cardView);
   $cardView.append(templateCardView({
     item: selectedCard['item_description'],
@@ -95,20 +112,64 @@ $(document).on('click', '#haveHelpedButton', function() {
       onHomeFeed = true;
       $cardView.empty();
       $cardContainer.show();
+      $newButton.show();
       getAndUpdateCards();
       alert("Thank you for your generosity!");
     })
   }
 });
 
+$(document).on('click', '#submitNeed', function() {
+  hideEverything();
+  $previewCard.show();
+  $previewCard.append(templatePreview({
+    item: $('#itemDescription').val(),
+    locationDescription: $('#locationDescription').val(),
+    lookFor: $('#lookFor').val(),
+    name: $('#firstName').val(),
+    latitude: currentLat,
+    longitude: currentLong,
+    KEY: KEY,
+    category: $('#category').val()
+  }));
+});
+
+$(document).on('click', '#backToSubmission', function() {
+  hideEverything();
+  $previewCard.empty();
+  $submissionForm.show();
+});
+
+$(document).on('click', '#confirm', function() {
+  $.post("http://35.22.9.99:7777/submit.php", {
+    name: $('#firstName').val(),
+    user_id: device.uuid,
+    item_desc: $('#itemDescription').val(),
+    category_id: $('#category').val(),
+    location_desc: $('#locationDescription').val(),
+    person_desc: $('#lookFor').val(),
+    long: currentLong,
+    lat: currentLat
+  })
+  .done(function(response) {
+    $newButton.show();
+    getAndUpdateCards();
+    alert('im here');
+    if (!response.success)
+      alert('There was an error: ' + response.error);
+  });
+
+  hideEverything();
+  $submissionForm.empty();
+  $previewCard.empty();
+  $cardContainer.show();
+  onHomeFeed = true;
+});
 
 
 $newButton.click(function() {
   hideEverything();
-  $submissionForm.show().html(templateSubmissionForm({
-    categories: CATEGORIES
-  }));
-
+  $submissionForm.show();
 });
 
 /////////
@@ -120,6 +181,7 @@ function hideEverything() {
   $cardView.hide();
   $submissionForm.hide();
   $newButton.hide();
+  $previewCard.hide();
 }
 function getAndUpdateCards() {
   if (!onHomeFeed)
@@ -202,33 +264,22 @@ TEMPLATE STRUCTURES
     <button id="haveHelpedButton" class="btn btn-primary btn-block">I have helped {{name}}</button>
 </script>
 
-<!--submission view-->
-<script id="template-submission-form" type="text/x-handlebars-template">​
-  <!--<div id = "square" style = "position: relative; max-width:20; margin-top: 20px;max-height: 60px"><img src="img/logo.png"/></div>
-
-   <form style = "positon:relative; padding-top:100px; margin:auto; max-width: 90%;position: center;">
-      <input type="text" name="name" placeholder="Name" />
-      <input type="text" name="item" placeholder="Item" />
-      <textarea placeholder="Location Description" name = "locat_disc"onkeyup="adjust_textarea(this)"></textarea>
-      <textarea placeholder="What to Look For" name = "desc" onkeyup="adjust_textarea(this)"></textarea>
-      <input type="button" class="btn btn-primary btn-block"value="Enter" />
-
-  </form>-->
-
-  <form>
-    <input type="text" placeholder="Name">
-    <select>
-      {{#list cat}}
-      <option>{{ name }}</option>
-      {{/list}}
-    </select>
-    <input type="text" placeholder="Item description">
-
-    <textarea rows="5"></textarea>
-    <button class="btn btn-positive btn-block">Choose existing</button>
-  </form>
-
+<!--preview-->
+<script id="template-preview" type="text/x-handlebars-template">​
+    <div class="card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7Clabel:S%7C{{latitude}},{{longitude}}&key={{KEY}}');">
+        <img class="card-category" src="img/{{category}}.png">
+        <span class="name">{{name}}</span>
+    </div>
+    <h3>Item:</h3>
+    {{item}}
+    <h3>Location Description:</h3>
+    {{locationDescription}}
+    <h3>Look For:</h3>
+    {{lookFor}}
+    <button id="backToSubmission" class="btn btn-primary">Back</button> <button id="confirm" class="btn btn-primary">Confirm</button>
 </script>
+
+
 
 <!--/////////
 COMPILING TEMPLATE STRUCTURES
@@ -236,8 +287,8 @@ COMPILING TEMPLATE STRUCTURES
 <script>
     var templateCard = Handlebars.compile($("#template-card").html());
     var templateCardView = Handlebars.compile($("#template-card-view").html());
-    var templateSubmissionForm = Handlebars.compile($("#template-submission-form").html());
-        
+    var templatePreview = Handlebars.compile($("#template-preview").html());
+    
 </script>
 
 
