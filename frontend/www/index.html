@@ -120,8 +120,7 @@ $(document).on('click', '.info-card', function() {
     lookFor: selectedCard['person_description'],
     name: selectedCard['first_name'],
     latitude: selectedCard['latitude'],
-    longitude: selectedCard['longitude'],
-    owner: selectedCard['user_id'] == device.uuid
+    longitude: selectedCard['longitude']
   }));
 });
 
@@ -167,7 +166,7 @@ $(document).on('click', '#backToSubmission', function() {
 $(document).on('click', '#confirm', function() {
   $.post("http://35.22.9.99:7777/submit.php", {
     name: $('#firstName').val(),
-    user_id: device.uuid,
+    user_id: null,
     item_desc: $('#itemDescription').val(),
     category_id: $('#category').val(),
     location_desc: $('#locationDescription').val(),
