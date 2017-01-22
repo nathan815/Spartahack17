@@ -49,3 +49,17 @@ body {
 .submit-need {
 
 }
+
+
+
+
+
+#haveHelpedButton {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    width:80%;
+
+    margin: 0 auto;
+}
