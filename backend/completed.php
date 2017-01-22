@@ -1,7 +1,7 @@
 <?php
 require 'bootstrap.php';
 
-$need_id = $_GET['id'];
+$need_id = isset($_POST['id']) ? $_POST['id'] : null;
 //$user_id = $_POST['user_id'];
 
 $query = "SELECT * FROM needs WHERE id = ?";
@@ -15,16 +15,17 @@ if(!$info) {
 
 $dbh->beginTransaction();
 
-$query = "INSERT INTO completed_needs ( `user_id`, `first_name`, `category_id`, 
+$query = "INSERT INTO completed_needs ( `user_id`, `first_name`, `category_id`, `item_description`,
                               `location_description`, `person_description`, 
                               `latitude`, `longitude` )
-          VALUES ( :user_id, :first_name, :category_id, :location_desc,
+          VALUES ( :user_id, :first_name, :category_id, :item_desc, :location_desc,
                    :person_desc, :lat, :long )";
 $q = $dbh->prepare($query);
 $params = [
     'user_id' => $info['user_id'],
     'first_name' => $info['first_name'],
     'category_id' => $info['category_id'],
+    'item_desc' => $info['item_description'],
     'location_desc' => $info['location_description'],
     'person_desc' => $info['person_description'],
     'lat' => $info['latitude'],
