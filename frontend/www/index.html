@@ -82,6 +82,7 @@
 </form>
 
 <script>
+var AJAX_HOST = "http://0bc4663c.ngrok.io/";
 var KEY = "AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM";
 var CATEGORIES = ["Hygiene", "Bedding", "Food", "Clothing", "Misc."];
 var currentLat = 23;
@@ -128,7 +129,7 @@ $(document).on('click', '.info-card', function() {
 
 $(document).on('click', '#haveHelpedButton', function() {
   if (confirm("Are you sure you've met this need?")) {
-    $.post("http://35.22.9.99:7777/completed.php", {
+    $.post(AJAX_HOST + "/completed.php", {
       id: currentCard.id
     }).done(function() {
       onHomeFeed = true;
@@ -165,7 +166,7 @@ $(document).on('click', '#backToSubmission', function() {
 });
 
 $(document).on('click', '#confirm', function() {
-  $.post("http://35.22.9.99:7777/submit.php", {
+  $.post(AJAX_HOST + "/submit.php", {
     name: $('#firstName').val(),
     user_id: null,
     item_desc: $('#itemDescription').val(),
@@ -227,7 +228,7 @@ function hideEverything() {
 function getAndUpdateCards() {
   if (!onHomeFeed)
     return;
-  $.ajax("http://35.22.9.99:7777/get_cards.php", {
+  $.ajax(AJAX_HOST + "/get_cards.php", {
     jsonp: false,
     method: "GET",
     dataType: "jsonp",
