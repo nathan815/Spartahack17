@@ -1,41 +1,38 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="msapplication-tap-highlight" content="no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
-    <!--<meta http-equiv="Content-Security-Policy" content="default-src *; gap: https://maps.googleapis.com" />-->
-    <meta http-equiv="Content-Security-Policy" content="" />
+  <meta charset="utf-8">
+  <meta content="telephone=no" name="format-detection">
+  <meta content="no" name="msapplication-tap-highlight">
+  <meta content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" name="viewport">
+  <!--<meta http-equiv="Content-Security-Policy" content="default-src *; gap: https://maps.googleapis.com" />-->
+  <meta content="" http-equiv="Content-Security-Policy">
+  <link href="lib/ratchet/css/ratchet.min.css" rel="stylesheet" type="text/css">
+  <link href="lib/ratchet/css/ratchet-theme-android.min.css" rel="stylesheet" type="text/css">
+  <link href="css/main.css" rel="stylesheet" type="text/css">
 
-    <link rel="stylesheet" type="text/css" href="lib/ratchet/css/ratchet.min.css" />
-    <link rel="stylesheet" type="text/css" href="lib/ratchet/css/ratchet-theme-android.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/main.css" />
-
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="lib/ratchet/js/ratchet.min.js"></script>
-    <script type="text/javascript" src="lib/jquery/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript" src="lib/handlebars/handlebars.js"></script>
-    <script src="js/main.js"></script>
-    
-    <title>Hello World</title>
+  <title>UnitedShare</title>
 </head>
 
 <body>
-<header class="bar bar-nav">
-  <a class="icon icon-left-nav pull-left hidden" id="back"></a>
-  <a href="#myPopover" class="pull-right">
-      <h1 class="title">
-        <span class="icon icon-more-vertical"></span>
-      </h1>
-    </a>
-  <!--<div class="image-wrapper">
+
+  <header class="bar bar-nav">
+    <a class="icon icon-left-nav pull-left hidden" id="back"></a> 
+    <a class="pull-right" href="#myPopover">
+    <h1 class="title">
+      <span class="icon icon-more-vertical"></span>
+    </h1></a> 
+
+    <!--<div class="image-wrapper">
     <img src ="img/uGive.png" class="scale-image" />
   </div>-->
-  <h1 class="title">UnitedShare</h1>
-</header>
 
-<!--<div class="segmented-control">
+
+    <h1 class="title">UnitedShare</h1>
+  </header>
+
+  <!--<div class="segmented-control">
   <a class="control-item active" href="#item1mobile">
     Food
   </a>
@@ -50,308 +47,118 @@
   </a>
 </div>-->
 
-<div id="content">
 
-<div id="cardContainer">
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <img src="img/spinner.gif" style="display:block;width:100px;margin: 0 auto;" />
-</div>
-<div id="cardView"></div>
-<div id="previewCard"></div>
-<button class="btn btn-primary" id="newButton"><span class="icon icon-plus"></span></button>
-<form id="submissionForm" class="hidden">
-  <input id="firstName" type="text" placeholder="Who to look for (first name)">
-  <select id="category">
-    <option value="-1">Choose a Category</option>
-    <option value="0">Hygiene</option>
-    <option value="1">Bedding</option>
-    <option value="2">Food</option>
-    <option value="3">Clothing</option>
-    <option value="4">Misc.</option>
-  </select>
-  <input id="itemDescription" type="text" placeholder="Describe the item they need">
-
-  <textarea id="locationDescription" placeholder="Describe the location of the person" rows="5"></textarea>
-  <textarea id="lookFor" placeholder="Give a short description of the person" rows="5"></textarea>
-  <button type="button" id="submitNeed" class="btn btn-primary btn-block">Submit Need</button>
-</form>
-
-<script>
-var AJAX_HOST = "http://8e405a4b.ngrok.io/";
-var KEY = "AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM";
-var CATEGORIES = ["Hygiene", "Bedding", "Food", "Clothing", "Misc."];
-var currentLat = 23;
-var currentLong = 34;
-var currentRadius = 5;
-var currentCard;
-var selectedCard;
-var $cardContainer = $("#cardContainer");
-var $cardView = $('#cardView');
-var $submissionForm = $('#submissionForm');
-var $newButton = $('#newButton');
-var $submitNeed = $('#submitNeed');
-var $previewCard = $('#previewCard');
-var $backBtn = $('#back');
-var viewPortPosition;
-var onHomeFeed = true;
-setLocation(getAndUpdateCards);
-var checkTimer = setInterval(getAndUpdateCards, 10000);
-var setLocationInterval = setInterval(setLocation, 120000);
+  <div id="content">
+    <div id="cardContainer"><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <img src="img/spinner.gif" style="display:block;width:100px;margin: 0 auto;">
+    </div>
 
 
-/////////
-//EVENT LISTENERS
-//////////
-$(document).on('click', '.info-card', function() {
-  hideEverything();
-  var id = $(this).attr('id');
-  var selectedCard = currentCards[' ' + id];
-  currentCard = selectedCard;
-  $cardContainer.hide();
-  $cardView.empty().show();
-  $(this).clone().appendTo($cardView);
-  $backBtn.show();
-  $cardView.append(templateCardView({
-    item: selectedCard['item_description'],
-    locationDescription: selectedCard['location_description'],
-    lookFor: selectedCard['person_description'],
-    name: selectedCard['first_name'],
-    latitude: selectedCard['latitude'],
-    longitude: selectedCard['longitude']
-  }));
-});
+    <div id="cardView"></div>
 
+    <div id="previewCard"></div>
+    <button class="btn btn-primary" id="newButton"><span class="icon icon-plus"></span></button>
 
-$(document).on('click', '#haveHelpedButton', function() {
-  if (confirm("Are you sure you've met this need?")) {
-    $.post(AJAX_HOST + "/completed.php", {
-      id: currentCard.id
-    }).done(function() {
-      onHomeFeed = true;
-      $cardView.empty();
-      $cardContainer.show();
-      $newButton.show();
-      getAndUpdateCards();
-      alert("Thank you for your generosity!");
-    })
-  }
-});
-
-$(document).on('click', '#submitNeed', function() {
-  hideEverything();
-  $previewCard.show();
-  $backBtn.show();
-  $previewCard.append(templatePreview({
-    item: $('#itemDescription').val(),
-    locationDescription: $('#locationDescription').val(),
-    lookFor: $('#lookFor').val(),
-    name: $('#firstName').val(),
-    latitude: currentLat,
-    longitude: currentLong,
-    KEY: KEY,
-    category: $('#category').val()
-  }));
-});
-
-$(document).on('click', '#backToSubmission', function() {
-  hideEverything();
-  $backBtn.show();
-  $previewCard.empty();
-  $submissionForm.show();
-});
-
-$(document).on('click', '#confirm', function() {
-  $.post(AJAX_HOST + "/submit.php", {
-    name: $('#firstName').val(),
-    user_id: null,
-    item_desc: $('#itemDescription').val(),
-    category_id: $('#category').val(),
-    location_desc: $('#locationDescription').val(),
-    person_desc: $('#lookFor').val(),
-    long: currentLong,
-    lat: currentLat
-  })
-  .done(function(response) {
-    hideEverything();
-    $newButton.show();
-    document.getElementById('submissionForm').reset();
-    $previewCard.empty();
-    $cardContainer.show();
-    onHomeFeed = true;
-    getAndUpdateCards();
-    if (!response.success)
-      alert('There was an error: ' + response.error);
-  });
-
-});
-
-
-$newButton.click(function() {
-  hideEverything();
-  $submissionForm.show();
-  $backBtn.show();
-});
-
-$backBtn.click(back);
-document.addEventListener("backbutton", back, false);
-
-/////////
-//FUNCTIONS
-//////////
-function back() {
-  if($previewCard.is(':visible')) {
-    $previewCard.hide().empty();
-    $submissionForm.show();
-    $backBtn.show();
-  }
-  else {
-    hideEverything();
-    $cardContainer.show();
-    $newButton.show();
-    onHomeFeed = true;
-  }
-}
-function hideEverything() {
-  onHomeFeed = false;
-  $cardContainer.hide();
-  $cardView.hide();
-  $submissionForm.hide();
-  $newButton.hide();
-  $previewCard.hide();
-  $backBtn.hide();
-}
-function getAndUpdateCards() {
-  if (!onHomeFeed)
-    return;
-  $.ajax(AJAX_HOST + "/get_cards.php", {
-    jsonp: false,
-    method: "GET",
-    dataType: "jsonp",
-    jsonpCallback: "cb",
-    data: {
-      lat: currentLat,
-      long: currentLong,
-      radius: currentRadius
-    },
-    success: function(response) {
-      currentCards = response.cards;
-      updateCards();
-    }
-  });
-}
-
-function updateCards() {
-  viewPortPosition = $(window).scrollTop();
-  $cardContainer.empty();
-  for (var card in currentCards) {
-
-    $cardContainer.append(templateCard({
-        id: currentCards[card]["id"],
-        latitude: currentCards[card]["latitude"],
-        longitude: currentCards[card]["longitude"],
-        KEY: KEY,
-        category: currentCards[card]["category_id"],
-        time: currentCards[card]["time"],
-        name: currentCards[card]["first_name"],
-        distance: currentCards[card]["distance"]
-    }).trim());
-  }
-  $(window).scrollTop(viewPortPosition);
-}
-
-function setLocation(callback) {
-  tempVar = this;
-  navigator.geolocation.getCurrentPosition(function(position) {
-    tempVar.currentLat = position.coords.latitude;
-    tempVar.currentLong = position.coords.longitude;
-    if (callback != undefined) {
-      callback();
-    }
-  });
-}
-
-function adjust_textarea(h) {
-  h.style.height = "20px";
-  h.style.height = (h.scrollHeight)+"px";
-}
-
-</script>
+    <form class="hidden" id="submissionForm" name="submissionForm">
+      <select id="category">
+        <option value="-1">Choose a Category...</option>
+        <option value="0">Hygiene</option>
+        <option value="1">Bedding</option>
+        <option value="2">Food</option>
+        <option value="3">Clothing</option>
+        <option value="4">Misc.</option>
+      </select> 
+      <input id="firstName" placeholder="Who to look for (first name)" type="text"> 
+      <input id="itemDescription" placeholder="Describe the item they need" type="text"> 
+      <textarea id="locationDescription" placeholder="Describe the location of the person" rows="5"></textarea> 
+      <textarea id="lookFor" placeholder="Give a short description of the person" rows="5"></textarea> <button class="btn btn-primary btn-block" id="submitNeed" type="button">Submit Need</button>
+    </form>
 
 <!--/////////
 TEMPLATE STRUCTURES
 //////////-->
 
-<!--card-->
-<script id="template-card" type="text/x-handlebars-template">​
-    <div class="card info-card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7C{{latitude}},{{longitude}}&key={{KEY}}');">
-        <img class="card-category" src="img/{{category}}.png">
-        <span class="distance">{{distance}} miles away</span>
-        <span class="time">{{time}} ago</span>
-        <span class="name">{{name}}</span>
-    </div>
-</script>
+    <!--card-->
+    <script id="template-card" type="text/x-handlebars-template">
+    ​
+      <div class="card info-card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7C{{latitude}},{{longitude}}&key={{KEY}}');">
+          <img class="card-category" src="img/{{category}}.png">
+          <span class="distance">{{distance}} miles away</span>
+          <span class="time">{{time}} ago</span>
+          <span class="name">{{name}}</span>
+      </div>
+    </script> 
 
-<!--card view-->
-<script id="template-card-view" type="text/x-handlebars-template">​
-    <div class="card section">
-      <b>Item:</b>
-      {{item}}
-    </div>
-    <div class="card section">
-      <b>Location Description:</b>
-      {{locationDescription}}
-    </div>
-    <div class="card section">
-      <b>Look For:</b>
-      {{lookFor}}
-    </div>
-    <button id="haveHelpedButton" class="btn btn-primary btn-block">
-      <span class="icon icon-check"></span>
-      I have helped {{name}}
-    </button>
-</script>
+    <!--card view-->
+    <script id="template-card-view" type="text/x-handlebars-template">
+    ​
+      <div class="card section">
+        <b>Item:</b>
+        {{item}}
+      </div>
+      <div class="card section">
+        <b>Location Description:</b>
+        {{locationDescription}}
+      </div>
+      <div class="card section">
+        <b>Look For:</b>
+        {{lookFor}}
+      </div>
+      <button id="haveHelpedButton" class="btn btn-primary btn-block">
+        <span class="icon icon-check"></span>
+        I have helped {{name}}
+      </button>
+    </script> 
 
-<!--preview-->
-<script id="template-preview" type="text/x-handlebars-template">​
-    <div class="card info-card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7C{{latitude}},{{longitude}}&key={{KEY}}');">
-        <img class="card-category" src="img/{{category}}.png">
-        <span class="name">{{name}}</span>
-    </div>
-    <div class="card section">
-      <b>Item Needed:</b>
-      {{item}}
-    </div>
-    <div class="card section">
-      <b>Description of Location:</b>
-      {{locationDescription}}
-    </div>
-    <div class="card section">
-      <b>Look For:</b>
-      {{lookFor}}
-    </div>
-    <div class="buttonToolbar">
-      <button id="backToSubmission" class="btn btn-danger">Cancel</button> 
-      <button id="confirm" class="btn btn-primary">Confirm</button>
-    </div>
-</script>
+    <!--preview-->
+    <script id="template-preview" type="text/x-handlebars-template">
+    ​
+      <div class="card info-card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7C{{latitude}},{{longitude}}&key={{KEY}}');">
+          <img class="card-category" src="img/{{category}}.png">
+          <span class="name">{{name}}</span>
+      </div>
+      <div class="card section">
+        <b>Item Needed:</b>
+        {{item}}
+      </div>
+      <div class="card section">
+        <b>Description of Location:</b>
+        {{locationDescription}}
+      </div>
+      <div class="card section">
+        <b>Look For:</b>
+        {{lookFor}}
+      </div>
+      <div class="buttonToolbar">
+        <button id="backToSubmission" class="btn btn-danger">Cancel</button> 
+        <button id="confirm" class="btn btn-primary">Confirm</button>
+      </div>
+    </script> 
 
-
+<!--//////////
+SCRIPT IMPORTS
+///////////-->
+    <script src="cordova.js" type="text/javascript"></script> 
+    <script src="lib/ratchet/js/ratchet.min.js" type="text/javascript"></script> 
+    <script src="lib/jquery/jquery-3.1.1.min.js" type="text/javascript"></script> 
+    <script src="lib/handlebars/handlebars.js" type="text/javascript"></script> 
 
 <!--/////////
 COMPILING TEMPLATE STRUCTURES
 //////////-->
-<script>
-    var templateCard = Handlebars.compile($("#template-card").html());
-    var templateCardView = Handlebars.compile($("#template-card-view").html());
-    var templatePreview = Handlebars.compile($("#template-preview").html());
-    
-</script>
+    <script>
+      var templateCard = Handlebars.compile($("#template-card").html());
+      var templateCardView = Handlebars.compile($("#template-card-view").html());
+      var templatePreview = Handlebars.compile($("#template-preview").html());
+    </script> 
 
+    <script src="js/app.js" type="text/javascript"></script> 
 
+  </div>
 </body>
 </html>

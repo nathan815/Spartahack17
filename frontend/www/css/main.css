@@ -114,3 +114,6 @@ position: relative;
 #submissionForm {
     padding: 20px;
 }
+#submissionForm select {
+    font-size: 16px;
+}
