@@ -1,5 +1,7 @@
 <?php
 
+define('FEET_IN_MILE', 5280);
+
 function output_json_error($msg) {
     output_json(null, false, $msg);
     exit;
@@ -36,4 +38,16 @@ function time_since($time)
    }
 
    return "$difference $periods[$j]";
+}
+
+function distance_label($distance) {
+  $distanceRounded = round($distance, 2)+0;
+  if($distance == 0) {
+    return "right here";
+  }
+  if($distance < 1) {
+    $distanceRounded = number_format($distanceRounded*FEET_IN_MILE,0);
+    return "$distanceRounded feet";
+  }
+  return number_format($distanceRounded,2)+0 . " mile" . ($distanceRounded != 1 ? "s" : "");
 }

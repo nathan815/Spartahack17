@@ -32,8 +32,8 @@ body {
     box-shadow: 1px 1px 4px #666;
     border: 0;
 }
-.info-card:focus {
-
+.info-card.focus {
+    opacity: 0.8;
 }
 .info-card span {
     display: block;
@@ -116,4 +116,20 @@ position: relative;
 }
 #submissionForm select {
     font-size: 16px;
+}
+
+#mainView {
+
+}
+
+#locationError {
+    text-align: center;
+    margin: 150px 0;
+    font-size: 14px;
+}
+#locationError span {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 60px;
+    opacity: 0.8;
 }

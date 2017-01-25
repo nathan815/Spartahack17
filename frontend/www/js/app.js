@@ -1,3 +1,12 @@
+/**
+ * Determine whether the file loaded from PhoneGap or not
+ */
+function isPhoneGap() {
+    return (window.cordova || window.PhoneGap || window.phonegap) 
+    && /^file:\/{3}[^\/]/i.test(window.location.href) 
+    && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);
+}
+
 /*
 VARIABLES
 */
@@ -5,11 +14,12 @@ VARIABLES
 var AJAX_HOST = "http://8e405a4b.ngrok.io/";
 var KEY = "AIzaSyCbbew5zS0asgUNBmz4WU5oDsuh-AgWjWM";
 var CATEGORIES = ["Hygiene", "Bedding", "Food", "Clothing", "Misc."];
-var currentLat = 23;
+var currentLat = 23.007;
 var currentLong = 34;
-var currentRadius = 5;
+var currentRadius = 500;
 var currentCard;
 var selectedCard;
+var $mainView = $('#mainView');
 var $cardContainer = $("#cardContainer");
 var $cardView = $('#cardView');
 var $submissionForm = $('#submissionForm');
@@ -19,9 +29,17 @@ var $previewCard = $('#previewCard');
 var $backBtn = $('#back');
 var viewPortPosition;
 var onHomeFeed = true;
-setLocation(getAndUpdateCards);
-var checkTimer = setInterval(getAndUpdateCards, 10000);
-var setLocationInterval = setInterval(setLocation, 120000);
+
+var checkTimer;
+var setLocationInterval;
+
+// Get device location and then init the app
+if(isPhoneGap()) {
+  setLocation(init);
+}
+else {
+  init();
+}
 
 
 /*
@@ -33,7 +51,6 @@ $(document).on('click', '.info-card', function() {
   var id = $(this).attr('id');
   var selectedCard = currentCards[' ' + id];
   currentCard = selectedCard;
-  $cardContainer.hide();
   $cardView.empty().show();
   $(this).clone().appendTo($cardView);
   $backBtn.show();
@@ -47,6 +64,9 @@ $(document).on('click', '.info-card', function() {
   }));
 });
 
+$(document).on('focus', '.info-card', function() {
+  $(this).toggleClass('focus');
+});
 
 $(document).on('click', '#haveHelpedButton', function() {
   if (confirm("Are you sure you've met this need?")) {
@@ -54,9 +74,8 @@ $(document).on('click', '#haveHelpedButton', function() {
       id: currentCard.id
     }).done(function() {
       onHomeFeed = true;
-      $cardView.empty();
-      $cardContainer.show();
-      $newButton.show();
+      $cardView.empty().hide();
+      $mainView.show();
       getAndUpdateCards();
       alert("Thank you for your generosity!");
     })
@@ -99,10 +118,9 @@ $(document).on('click', '#confirm', function() {
   })
   .done(function(response) {
     hideEverything();
-    $newButton.show();
     document.getElementById('submissionForm').reset();
     $previewCard.empty();
-    $cardContainer.show();
+    $mainView.show();
     onHomeFeed = true;
     getAndUpdateCards();
     if (!response.success)
@@ -110,7 +128,6 @@ $(document).on('click', '#confirm', function() {
   });
 
 });
-
 
 $newButton.click(function() {
   hideEverything();
@@ -125,6 +142,14 @@ document.addEventListener("backbutton", back, false);
 FUNCTIONS
 */
 
+function init() {
+  getAndUpdateCards();
+  checkTimer = setInterval(getAndUpdateCards, 10000);
+  if(isPhoneGap()) {
+    setLocationInterval = setInterval(setLocation, 120000);
+  }
+}
+
 function back() {
   if($previewCard.is(':visible')) {
     $previewCard.hide().empty();
@@ -133,14 +158,13 @@ function back() {
   }
   else {
     hideEverything();
-    $cardContainer.show();
-    $newButton.show();
+    $mainView.show();
     onHomeFeed = true;
   }
 }
 function hideEverything() {
   onHomeFeed = false;
-  $cardContainer.hide();
+  $mainView.hide();
   $cardView.hide();
   $submissionForm.hide();
   $newButton.hide();
@@ -161,7 +185,7 @@ function getAndUpdateCards() {
       radius: currentRadius
     },
     success: function(response) {
-      currentCards = response.cards;
+      currentCards = response.data.cards;
       updateCards();
     }
   });
@@ -180,20 +204,24 @@ function updateCards() {
         category: currentCards[card]["category_id"],
         time: currentCards[card]["time"],
         name: currentCards[card]["first_name"],
-        distance: currentCards[card]["distance"]
+        distance: currentCards[card]["distance_with_label"]
     }).trim());
   }
   $(window).scrollTop(viewPortPosition);
 }
 
 function setLocation(callback) {
-  tempVar = this;
+  if(!isPhoneGap()) return;
+  _this = this;
   navigator.geolocation.getCurrentPosition(function(position) {
-    tempVar.currentLat = position.coords.latitude;
-    tempVar.currentLong = position.coords.longitude;
+    _this.currentLat = position.coords.latitude;
+    _this.currentLong = position.coords.longitude;
     if (callback != undefined) {
       callback();
     }
+  }, function() {
+    hideEverything();
+    $('#locationError').show();
   });
 }
 

@@ -49,20 +49,28 @@
 
 
   <div id="content">
-    <div id="cardContainer"><br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <img src="img/spinner.gif" style="display:block;width:100px;margin: 0 auto;">
-    </div>
+   
+   <div id="locationError" class="hidden">
+    <span class="icon icon-info"></span>
+    <br />
+    Please enable location services for UnitedShare.
+   </div>
 
+  <div id="mainView">
+    <button class="btn btn-primary" id="newButton"><span class="icon icon-plus"></span></button>
+    <div id="cardContainer"><br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <img src="img/spinner.gif" style="display:block;width:100px;margin: 0 auto;">
+    </div>
+  </div>
 
     <div id="cardView"></div>
 
     <div id="previewCard"></div>
-    <button class="btn btn-primary" id="newButton"><span class="icon icon-plus"></span></button>
 
     <form class="hidden" id="submissionForm" name="submissionForm">
       <select id="category">
@@ -88,7 +96,7 @@ TEMPLATE STRUCTURES
     ​
       <div class="card info-card" id="{{id}}" style="background-image:url('https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=17&size=600x300&maptype=hybrid&markers=color:red%7C{{latitude}},{{longitude}}&key={{KEY}}');">
           <img class="card-category" src="img/{{category}}.png">
-          <span class="distance">{{distance}} miles away</span>
+          <span class="distance">{{distance}}</span>
           <span class="time">{{time}} ago</span>
           <span class="name">{{name}}</span>
       </div>
